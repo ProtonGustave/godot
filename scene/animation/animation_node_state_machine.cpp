@@ -308,7 +308,9 @@ float AnimationNodeStateMachinePlayback::process(AnimationNodeStateMachine *p_st
 				if (!stop_request && p_state_machine->start_node) {
 					// can restart, just postpone traveling
 					path.clear();
+                    StringName prev = current;
 					current = p_state_machine->start_node;
+                    emit_signal("current_changed", prev, current);
 					playing = true;
 					play_start = true;
 				} else {
@@ -321,7 +323,9 @@ float AnimationNodeStateMachinePlayback::process(AnimationNodeStateMachine *p_st
 				if (!_travel(p_state_machine, start_request)) {
 					// can't travel, then teleport
 					path.clear();
+                    StringName prev = current;
 					current = start_request;
+                    emit_signal("current_changed", prev, current);
 				}
 				start_request = StringName(); //clear start request
 			}
@@ -329,7 +333,9 @@ float AnimationNodeStateMachinePlayback::process(AnimationNodeStateMachine *p_st
 			// teleport to start
 			if (p_state_machine->states.has(start_request)) {
 				path.clear();
+                StringName prev = current;
 				current = start_request;
+                emit_signal("current_changed", prev, current);
 				playing = true;
 				play_start = true;
 				start_request = StringName(); //clear start request
@@ -345,7 +351,9 @@ float AnimationNodeStateMachinePlayback::process(AnimationNodeStateMachine *p_st
 
 	if (do_start) {
 		if (p_state_machine->start_node != StringName() && p_seek && p_time == 0) {
+            StringName prev = current;
 			current = p_state_machine->start_node;
+            emit_signal("current_changed", prev, current);
 		}
 
 		len_current = p_state_machine->blend_node(current, p_state_machine->states[current].node, 0, true, 1.0, AnimationNode::FILTER_IGNORE, false);
@@ -355,7 +363,9 @@ float AnimationNodeStateMachinePlayback::process(AnimationNodeStateMachine *p_st
 
 	if (!p_state_machine->states.has(current)) {
 		playing = false; //current does not exist
+        StringName prev = current;
 		current = StringName();
+        emit_signal("current_changed", prev, current);
 		return 0;
 	}
 	float fade_blend = 1.0;
@@ -464,7 +474,9 @@ float AnimationNodeStateMachinePlayback::process(AnimationNodeStateMachine *p_st
 			if (path.size()) { //if it came from path, remove path
 				path.remove(0);
 			}
+            StringName prev = current;
 			current = next;
+            emit_signal("current_changed", prev, current);
 			if (switch_mode == AnimationNodeStateMachineTransition::SWITCH_MODE_SYNC) {
 				len_current = p_state_machine->blend_node(current, p_state_machine->states[current].node, 0, true, 0, AnimationNode::FILTER_IGNORE, false);
 				pos_current = MIN(pos_current, len_current);
@@ -497,6 +509,8 @@ void AnimationNodeStateMachinePlayback::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_current_play_position"), &AnimationNodeStateMachinePlayback::get_current_play_pos);
 	ClassDB::bind_method(D_METHOD("get_current_length"), &AnimationNodeStateMachinePlayback::get_current_length);
 	ClassDB::bind_method(D_METHOD("get_travel_path"), &AnimationNodeStateMachinePlayback::get_travel_path);
+
+	ADD_SIGNAL(MethodInfo("current_changed", PropertyInfo(Variant::STRING, "prev"), PropertyInfo(Variant::STRING, "new")));
 }
 
 AnimationNodeStateMachinePlayback::AnimationNodeStateMachinePlayback() {
