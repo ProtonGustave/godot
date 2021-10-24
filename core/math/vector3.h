@@ -35,6 +35,7 @@
 #include "core/ustring.h"
 
 class Basis;
+class Quat;
 
 struct Vector3 {
 	static const int AXIS_COUNT = 3;
@@ -107,6 +108,7 @@ struct Vector3 {
 	_FORCE_INLINE_ real_t dot(const Vector3 &p_b) const;
 	Basis outer(const Vector3 &p_b) const;
 	Basis to_diagonal_matrix() const;
+	Quat rotation() const;
 
 	_FORCE_INLINE_ Vector3 abs() const;
 	_FORCE_INLINE_ Vector3 floor() const;

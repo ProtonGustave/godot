@@ -1952,6 +1952,7 @@ void EditorFileSystem::reimport_files(const Vector<String> &p_files) {
 
 	files.sort();
 
+    // TODO: make use of threads here
 	for (int i = 0; i < files.size(); i++) {
 		pr.step(files[i].path.get_file(), i);
 		_reimport_file(files[i].path);

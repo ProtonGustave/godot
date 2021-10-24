@@ -147,6 +147,15 @@ Basis Vector3::to_diagonal_matrix() const {
 			0, 0, z);
 }
 
+Quat Vector3::rotation() const {
+	real_t nx = Math::atan2(y, Math::sqrt(x * x + y * y));
+	real_t ny = Math::atan2(x, z);
+	real_t nz = 0.0f;
+    Vector3 euler(nx, ny, nz);
+
+	return Quat(euler);
+}
+
 bool Vector3::is_equal_approx(const Vector3 &p_v) const {
 	return Math::is_equal_approx(x, p_v.x) && Math::is_equal_approx(y, p_v.y) && Math::is_equal_approx(z, p_v.z);
 }

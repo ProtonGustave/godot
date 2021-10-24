@@ -444,6 +444,7 @@ struct _VariantCall {
 	VCALL_LOCALMEM1R(Vector3, cross);
 	VCALL_LOCALMEM1R(Vector3, outer);
 	VCALL_LOCALMEM0R(Vector3, to_diagonal_matrix);
+	VCALL_LOCALMEM0R(Vector3, rotation);
 	VCALL_LOCALMEM0R(Vector3, abs);
 	VCALL_LOCALMEM0R(Vector3, floor);
 	VCALL_LOCALMEM0R(Vector3, ceil);
@@ -1799,6 +1800,7 @@ void register_variant_methods() {
 	ADDFUNC1R(VECTOR3, VECTOR3, Vector3, cross, VECTOR3, "b", varray());
 	ADDFUNC1R(VECTOR3, BASIS, Vector3, outer, VECTOR3, "b", varray());
 	ADDFUNC0R(VECTOR3, BASIS, Vector3, to_diagonal_matrix, varray());
+	ADDFUNC0R(VECTOR3, QUAT, Vector3, rotation, varray());
 	ADDFUNC0R(VECTOR3, VECTOR3, Vector3, abs, varray());
 	ADDFUNC0R(VECTOR3, VECTOR3, Vector3, floor, varray());
 	ADDFUNC0R(VECTOR3, VECTOR3, Vector3, ceil, varray());
