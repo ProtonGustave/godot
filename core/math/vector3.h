@@ -126,6 +126,7 @@ struct Vector3 {
 	_FORCE_INLINE_ real_t angle_to(const Vector3 &p_to) const;
 	_FORCE_INLINE_ real_t signed_angle_to(const Vector3 &p_to, const Vector3 &p_axis) const;
 	_FORCE_INLINE_ Vector3 direction_to(const Vector3 &p_to) const;
+	_FORCE_INLINE_ Vector3 xz_direction_to(const Vector3 &p_to) const;
 
 	_FORCE_INLINE_ Vector3 slide(const Vector3 &p_normal) const;
 	_FORCE_INLINE_ Vector3 bounce(const Vector3 &p_normal) const;
@@ -247,6 +248,12 @@ real_t Vector3::signed_angle_to(const Vector3 &p_to, const Vector3 &p_axis) cons
 
 Vector3 Vector3::direction_to(const Vector3 &p_to) const {
 	Vector3 ret(p_to.x - x, p_to.y - y, p_to.z - z);
+	ret.normalize();
+	return ret;
+}
+
+Vector3 Vector3::xz_direction_to(const Vector3 &p_to) const {
+	Vector3 ret(p_to.x - x, 0.0, p_to.z - z);
 	ret.normalize();
 	return ret;
 }
